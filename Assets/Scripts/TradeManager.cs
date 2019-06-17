@@ -28,6 +28,7 @@ public class TradeManager : MonoBehaviour {
     private bool npcSeen;
     private bool cakeSeen;
     private bool raffleSeen;
+    private bool ballSeen;
 
     private Transform currentNPC;
     private GameObject currentItem;
@@ -48,6 +49,7 @@ public class TradeManager : MonoBehaviour {
         npcSeen = false;
         cakeSeen = false;
         raffleSeen = false;
+        ballSeen = false;
 
         _camera = transform.GetChild(0);
         sfx = transform.GetChild(1).GetComponent<AudioSource>();
@@ -85,6 +87,8 @@ public class TradeManager : MonoBehaviour {
             if (cakeSeen && (money >= cakesCost) && currentItem != null && currentItem.activeSelf) AddCake();
 
             if (raffleSeen && (money >= rafflesCost) && currentItem != null && currentItem.activeSelf) AddRaffle();
+
+            if (ballSeen) hit.transform.GetComponent<Rigidbody>().AddForceAtPosition((transform.forward + transform.up) * 400, hit.point);
         }
     }
 
@@ -114,11 +118,16 @@ public class TradeManager : MonoBehaviour {
 
                 return;
 
+            } else if (hit.transform.CompareTag("Ball")) {
+
+                if (!ballSeen) ballSeen = true;
+
             } else {
 
                 if (npcSeen) npcSeen = false;
                 if (cakeSeen) cakeSeen = false;
                 if (raffleSeen) raffleSeen = false;
+                if (ballSeen) ballSeen = false;
                 if (currentItem != null) currentItem = null;
             }
 
@@ -127,6 +136,7 @@ public class TradeManager : MonoBehaviour {
             if (npcSeen) npcSeen = false;
             if (cakeSeen) cakeSeen = false;
             if (raffleSeen) raffleSeen = false;
+            if (ballSeen) ballSeen = false;
             if (currentItem != null) currentItem = null;
         }
     }
