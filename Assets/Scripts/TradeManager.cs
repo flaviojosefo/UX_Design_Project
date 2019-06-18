@@ -1,5 +1,4 @@
 ﻿using UnityEngine;
-using UnityEngine.UI;
 using TMPro;
 
 public class TradeManager : MonoBehaviour {
@@ -14,6 +13,11 @@ public class TradeManager : MonoBehaviour {
 
     public GameObject knob;
     public GameObject hand;
+
+    public GameObject warning;
+    public GameObject warning2;
+
+    public Transform props;
 
     private float money;
 
@@ -36,6 +40,8 @@ public class TradeManager : MonoBehaviour {
     private Transform _camera;
     private AudioSource sfx;
 
+    private bool buy;
+
     void Start() {
 
         raffles = 0;
@@ -53,6 +59,8 @@ public class TradeManager : MonoBehaviour {
 
         _camera = transform.GetChild(0);
         sfx = transform.GetChild(1).GetComponent<AudioSource>();
+
+        buy = false;
     }
     
     void Update() {
@@ -86,7 +94,11 @@ public class TradeManager : MonoBehaviour {
 
             if (cakeSeen && (money >= cakesCost) && currentItem != null && currentItem.activeSelf) AddCake();
 
+            if (cakeSeen && (money <= cakesCost) && currentItem != null && currentItem.activeSelf) ShowWarning();
+
             if (raffleSeen && (money >= rafflesCost) && currentItem != null && currentItem.activeSelf) AddRaffle();
+
+            if(raffleSeen && (money <= rafflesCost) && currentItem != null && currentItem.activeSelf) ShowWarning();
 
             if (ballSeen) hit.transform.GetComponent<Rigidbody>().AddForceAtPosition((transform.forward + transform.up) * 400, hit.point);
         }
@@ -155,7 +167,7 @@ public class TradeManager : MonoBehaviour {
 
             } else {
 
-                // WARNING
+                ShowWarning2();
             }
 
         } else {
@@ -168,7 +180,7 @@ public class TradeManager : MonoBehaviour {
 
             } else {
 
-                // WARNING
+                ShowWarning2();
             }
         }
     }
@@ -205,7 +217,7 @@ public class TradeManager : MonoBehaviour {
         return false;
     }
 
-    private void UpdateUI(float amount) {
+    public void UpdateUI(float amount) {
 
         money += amount;
 
@@ -224,6 +236,49 @@ public class TradeManager : MonoBehaviour {
         
         if (hand.activeSelf) hand.SetActive(false);
         if (!knob.activeSelf) knob.SetActive(true);
+    }
+
+    private void ShowWarning() {
+
+        warning.SetActive(true);
+
+        Invoke("HideWarning", 2);
+    }
+
+    private void HideWarning() {
+
+        warning.SetActive(false);
+    }
+
+    private void ShowWarning2() {
+
+        warning2.SetActive(true);
+
+        Invoke("HideWarning2", 2);
+    }
+
+    private void HideWarning2() {
+
+        warning2.SetActive(false);
+    }
+
+    public void Buy(int cost) {
+
+        if (cost < money) {
+
+            UpdateUI(-cost);
+            buy = true;
+
+        } else {
+
+            ShowWarning();
+        }
+    }
+
+    public void ActivateItem(int itemNumber) {
+
+        props.GetChild(itemNumber).gameObject.SetActive(true);
+        buy = false;
     }
 
     private void OnDrawGizmos() {
