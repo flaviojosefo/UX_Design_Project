@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using UnityEngine.UI;
 using TMPro;
 
 public class TradeManager : MonoBehaviour {
@@ -18,6 +19,7 @@ public class TradeManager : MonoBehaviour {
     public GameObject warning2;
 
     public Transform props;
+    public Transform buttons;
 
     private float money;
 
@@ -265,9 +267,9 @@ public class TradeManager : MonoBehaviour {
     public void Buy(int cost) {
 
         if (cost < money) {
-
-            UpdateUI(-cost);
+            
             buy = true;
+            UpdateUI(-cost);
 
         } else {
 
@@ -277,8 +279,13 @@ public class TradeManager : MonoBehaviour {
 
     public void ActivateItem(int itemNumber) {
 
-        props.GetChild(itemNumber).gameObject.SetActive(true);
-        buy = false;
+        if (buy) {
+
+            sfx.Play();
+            props.GetChild(itemNumber).gameObject.SetActive(true);
+            buttons.GetChild(itemNumber).GetComponent<Button>().interactable = false;
+            buy = false;
+        }
     }
 
     private void OnDrawGizmos() {
