@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using UnityEngine.SceneManagement;
 using UnityStandardAssets.Characters.FirstPerson;
 
 public class CanvasManager : MonoBehaviour {
@@ -8,8 +9,6 @@ public class CanvasManager : MonoBehaviour {
     public GameObject[] introElements;
 
     public FirstPersonController fps;
-
-    //public TradeManager player;
 
     void Update() {
 
@@ -84,5 +83,10 @@ public class CanvasManager : MonoBehaviour {
             fps.enabled = true;
             return;
         }
+    }
+
+    public void Restart() {
+
+        SceneManager.LoadScene(0);
     }
 }

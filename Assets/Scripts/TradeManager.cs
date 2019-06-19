@@ -19,7 +19,12 @@ public class TradeManager : MonoBehaviour {
     public GameObject warning2;
 
     public Transform props;
+    public GameObject storeTop;
     public Transform buttons;
+    public GameObject cost;
+    public GameObject endMessage;
+
+    public CanvasManager cm;
 
     private float money;
 
@@ -284,12 +289,41 @@ public class TradeManager : MonoBehaviour {
             sfx.Play();
             props.GetChild(itemNumber).gameObject.SetActive(true);
             buttons.GetChild(itemNumber).GetComponent<Button>().interactable = false;
+            CheckButtons();
             buy = false;
         }
     }
 
+    private void CheckButtons() {
+
+        for (int i = 0; i < buttons.childCount; i++) {
+
+            if (buttons.GetChild(i).GetComponent<Button>().interactable) {
+
+                return;
+            }
+        }
+
+        DestroyStore();
+        ActivateEndMessage();
+    }
+
+    private void DestroyStore() {
+
+        cm.enabled = false;
+        storeTop.SetActive(false);
+        buttons.gameObject.SetActive(false);
+        cost.SetActive(false);
+    }
+
+    private void ActivateEndMessage() {
+
+        endMessage.SetActive(true);
+    }
+
     private void OnDrawGizmos() {
 
-        Gizmos.DrawRay(transform.position, transform.TransformDirection(Vector3.forward));
+        if (_camera != null)
+            Gizmos.DrawRay(_camera.position, _camera.TransformDirection(Vector3.forward));
     }
 }
