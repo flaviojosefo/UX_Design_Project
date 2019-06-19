@@ -309,8 +309,7 @@ public class TradeManager : MonoBehaviour {
     }
 
     private void DestroyStore() {
-
-        cm.enabled = false;
+        
         storeTop.SetActive(false);
         buttons.gameObject.SetActive(false);
         cost.SetActive(false);
