@@ -8,6 +8,7 @@ TagManager:
   - Cake
   - Raffle
   - Ball
+  - Tramp
   layers:
   - Default
   - TransparentFX
