@@ -1,15 +1,10 @@
 ﻿using UnityEngine;
 
 public class DoorBehaviour : MonoBehaviour {
-    
-    void Start() {
-
-
-    }
 
     void OnTriggerEnter(Collider other) {
         
-        if (other.CompareTag("NPC")) {
+        if (other.gameObject.layer == 8) {
 
             print("OPEN");
         }
@@ -17,7 +12,7 @@ public class DoorBehaviour : MonoBehaviour {
 
     void OnTriggerClose(Collider other) {
 
-        if (other.CompareTag("NPC")) {
+        if (other.gameObject.layer == 8) {
 
             print("CLOSE");
         }

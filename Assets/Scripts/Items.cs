@@ -4,15 +4,12 @@ using UnityEngine;
 
 public class Items : MonoBehaviour {
 
-    public TradeManager player;
-
     public List<GameObject> cakes;
     public List<GameObject> raffles;
     
     void Update() {
 
-        if (CheckItems(cakes) && CheckItems(raffles) &&
-           (player.cakes == 0) && (player.raffles == 0)) {
+        if (CheckItems(cakes) && CheckItems(raffles)) {
 
             RespawnItems(cakes);
             RespawnItems(raffles);

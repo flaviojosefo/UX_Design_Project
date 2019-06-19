@@ -24,7 +24,7 @@ public class GameManager : MonoBehaviour
     {
         timer += Time.deltaTime;
 
-        if (currentNPCs != maxNPCs && timer > 15) {
+        if (currentNPCs != maxNPCs && timer > 5.5f) {
             npcToSpawn = Random.Range(0, 4);
             pointToSpawn = Random.Range(0, 4);
             Vector3 localSpawn = spawnPoints[pointToSpawn].transform.position;

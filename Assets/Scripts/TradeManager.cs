@@ -9,8 +9,11 @@ public class TradeManager : MonoBehaviour {
     public TMP_Text cakesAmount;
     public TMP_Text rafflesAmount;
 
-    public float cakesCost = 2f;
-    public float rafflesCost = 1f;
+    public float cakesCost = 15f;
+    public float rafflesCost = 10f;
+
+    public int cakesSell = 30;
+    public int rafflesSell = 20;
 
     public GameObject knob;
     public GameObject hand;
@@ -23,6 +26,9 @@ public class TradeManager : MonoBehaviour {
     public Transform buttons;
     public GameObject cost;
     public GameObject endMessage;
+    public Transform price;
+
+    private TMP_Text priceText;
 
     public CanvasManager cm;
 
@@ -51,10 +57,12 @@ public class TradeManager : MonoBehaviour {
 
     void Start() {
 
+        priceText = price.GetChild(0).GetChild(0).GetComponent<TMP_Text>();
+
         raffles = 0;
         cakes = 0;
 
-        money = 10f;
+        money = 50f;
         moneyAmount.text = money.ToString();
         cakesAmount.text = cakes.ToString();
         rafflesAmount.text = raffles.ToString();
@@ -118,7 +126,7 @@ public class TradeManager : MonoBehaviour {
             if (hit.transform.CompareTag("NPC")) {
 
                 currentNPC = hit.transform;
-
+                if (!price.gameObject.activeSelf) ShowPrice(true, GetNpcItem(hit.transform.GetComponent<NPCBehaviour>().wantsCake));
                 if (!npcSeen) npcSeen = true;
                 
                 return;
@@ -126,6 +134,7 @@ public class TradeManager : MonoBehaviour {
             } else if (hit.transform.CompareTag("Cake")) {
 
                 currentItem = hit.transform.gameObject;
+                if (!price.gameObject.activeSelf) ShowPrice(false, (int)cakesCost);
                 if (!cakeSeen) cakeSeen = true;
 
                 return;
@@ -133,6 +142,7 @@ public class TradeManager : MonoBehaviour {
             } else if (hit.transform.CompareTag("Raffle")) {
 
                 currentItem = hit.transform.gameObject;
+                if (!price.gameObject.activeSelf) ShowPrice(false, (int)rafflesCost);
                 if (!raffleSeen) raffleSeen = true;
 
                 return;
@@ -143,6 +153,7 @@ public class TradeManager : MonoBehaviour {
 
             } else {
 
+                if (price.gameObject.activeSelf) HidePrice();
                 if (npcSeen) npcSeen = false;
                 if (cakeSeen) cakeSeen = false;
                 if (raffleSeen) raffleSeen = false;
@@ -152,12 +163,42 @@ public class TradeManager : MonoBehaviour {
 
         } else {
 
+            if (price.gameObject.activeSelf) HidePrice();
             if (npcSeen) npcSeen = false;
             if (cakeSeen) cakeSeen = false;
             if (raffleSeen) raffleSeen = false;
             if (ballSeen) ballSeen = false;
             if (currentItem != null) currentItem = null;
         }
+    }
+
+    private int GetNpcItem(bool cake) {
+
+        if (cake) {
+
+            return cakesSell;
+        }
+
+        return rafflesSell;
+    }
+
+    private void ShowPrice(bool isNpc, int prc) {
+
+        if (isNpc) {
+
+            priceText.text = $"Vender: {prc}€";
+
+        } else {
+
+            priceText.text = $"Preço: {prc}€";
+        }
+        
+        price.gameObject.SetActive(true);
+    }
+
+    private void HidePrice() {
+        
+        price.gameObject.SetActive(false);
     }
 
     private void Trade(Transform npc) {
@@ -170,7 +211,7 @@ public class TradeManager : MonoBehaviour {
 
                 sfx.Play();
                 cakes -= 1;
-                UpdateUI(5);
+                UpdateUI(cakesSell);
                 currentNPC.GetComponent<NPCBehaviour>().Traded = true;
 
             } else {
@@ -184,7 +225,7 @@ public class TradeManager : MonoBehaviour {
 
                 sfx.Play();
                 raffles -= 1;
-                UpdateUI(2);
+                UpdateUI(rafflesSell);
                 currentNPC.GetComponent<NPCBehaviour>().Traded = true;
 
             } else {

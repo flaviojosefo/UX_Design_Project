@@ -11,9 +11,7 @@ public class AutomaticDoors : MonoBehaviour
     }
 
     private void OnTriggerEnter(Collider other) {
-        print(456);
-        if (other.gameObject.tag == "NPC") {
-            print(654);
+        if (other.gameObject.layer == 8) {
             anim.SetBool("Open", true);
             StartCoroutine(CloseDoor());
         }

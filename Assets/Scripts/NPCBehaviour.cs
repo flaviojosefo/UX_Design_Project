@@ -158,7 +158,6 @@ public class NPCBehaviour : MonoBehaviour {
             anim.SetBool("Walking", false);
             float dist = Vector3.Distance(transform.position, playerFeet.transform.position);
             if (dist < 8) {
-                print(dist);
                 Vector3 lookPos = playerFeet.transform.position - transform.position;
                 lookPos.y = 0;
                 Quaternion rotation = Quaternion.LookRotation(lookPos);
