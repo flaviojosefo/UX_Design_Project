@@ -7,13 +7,14 @@ public class GameManager : MonoBehaviour
     public List<GameObject> nPCs;
 
     private int maxNPCs;
-    private int currentNPCs;
+    [HideInInspector]
+    public int currentNPCs;
     private float timer;
     private int npcToSpawn;
     private int pointToSpawn;
 
     private void Start() {
-        maxNPCs = 4;
+        maxNPCs = 6;
         currentNPCs = 0;
         timer = 5;
     }

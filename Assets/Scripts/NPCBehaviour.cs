@@ -9,6 +9,8 @@ public class NPCBehaviour : MonoBehaviour {
     public Sprite cakeSprite;
     public Sprite raffleSprite;
 
+    public bool Traded { get; set; }
+
     private SpriteRenderer sprite;
     private Animator anim;
     private GameObject e1;
@@ -29,6 +31,7 @@ public class NPCBehaviour : MonoBehaviour {
         exit1 = false;
         startMovement = false;
         moveToSpot = false;
+        Traded = false;
         stopTime = 0;
         time = 0;
         timeLimit = Random.Range(5, 16);
@@ -61,50 +64,78 @@ public class NPCBehaviour : MonoBehaviour {
     }
 
     private void Update() {
-        if (!exit1) {
-            UpdateLerpTime();
-            transform.position = Vector3.Lerp(startPos, e1.transform.position, perc);
-            transform.LookAt(e1.transform.position);
-            float dist = Vector3.Distance(transform.position, e1.transform.position);
-            if (dist < 0.5f) {
-                startPos = transform.position;
-                currentLerpTime = 0;
-                exit1 = true;
-            }
-        } else if (!startMovement) {
-            UpdateLerpTime();
-            transform.position = Vector3.Lerp(startPos, e2.transform.position, perc);
-            transform.LookAt(e2.transform.position);
-            float dist = Vector3.Distance(transform.position, e2.transform.position);
-            if (dist < 0.5f) {
-                startPos = transform.position;
-                currentLerpTime = 0;
-                startMovement = true;
-            }
-        }
-
-        stopTime += Time.deltaTime;
-
-        if (startMovement && stopTime >= timeLimit) {
-            anim.SetBool("Walking", true);
-            Vector3 direction = transform.forward;
-            if (moveToSpot) {
-                time += Time.deltaTime * 2;
-                transform.position += direction * Time.deltaTime * 2;
-
-                if (time > 4) {
-                    timeLimit = Random.Range(5, 16);
+        if (!Traded) {
+            if (!exit1) {
+                UpdateLerpTime();
+                transform.position = Vector3.Lerp(startPos, e1.transform.position, perc);
+                transform.LookAt(e1.transform.position);
+                float dist = Vector3.Distance(transform.position, e1.transform.position);
+                if (dist < 0.5f) {
                     startPos = transform.position;
-                    moveToSpot = false;
-                    stopTime = 0;
-                    time = 0;
+                    currentLerpTime = 0;
+                    exit1 = true;
                 }
-            } else {
-                direction = new Vector3(0, Random.Range(0, 360), 0);
-                transform.rotation = Quaternion.Euler(direction);
-                if (!(Physics.Raycast(transform.position, transform.forward, 6))) {
-                    direction = transform.forward;
-                    moveToSpot = true;
+            } else if (!startMovement) {
+                UpdateLerpTime();
+                transform.position = Vector3.Lerp(startPos, e2.transform.position, perc);
+                transform.LookAt(e2.transform.position);
+                float dist = Vector3.Distance(transform.position, e2.transform.position);
+                if (dist < 0.5f) {
+                    startPos = transform.position;
+                    currentLerpTime = 0;
+                    startMovement = true;
+                    stopTime = timeLimit;
+                }
+            }
+
+            stopTime += Time.deltaTime;
+
+            if (startMovement && stopTime >= timeLimit) {
+                anim.SetBool("Walking", true);
+                Vector3 direction = transform.forward;
+                if (moveToSpot) {
+                    time += Time.deltaTime * 2;
+                    transform.position += direction * Time.deltaTime * 2;
+
+                    if (time > 5) {
+                        timeLimit = Random.Range(5, 16);
+                        startPos = transform.position;
+                        moveToSpot = false;
+                        stopTime = 0;
+                        time = 0;
+                    }
+                } else {
+                    direction = new Vector3(0, Random.Range(0, 360), 0);
+                    transform.rotation = Quaternion.Euler(direction);
+                    if (!(Physics.Raycast(transform.position, transform.forward, 6))) {
+                        direction = transform.forward;
+                        moveToSpot = true;
+                    }
+                }
+            }
+        }else if (Traded) {
+            gameObject.tag = "Untagged";
+            sprite.enabled = false;
+            if (exit1) {
+                anim.SetBool("Walking", true);
+                startMovement = false;
+                UpdateLerpTime();
+                transform.position = Vector3.Lerp(startPos, e2.transform.position, perc);
+                transform.LookAt(e2.transform.position);
+                float dist = Vector3.Distance(transform.position, e2.transform.position);
+                if (dist < 0.5f) {
+                    exit1 = false;
+                    startPos = transform.position;
+                    currentLerpTime = 0;
+                }
+            } else if (!startMovement) {
+                UpdateLerpTime();
+                transform.position = Vector3.Lerp(startPos, e1.transform.position, perc);
+                transform.LookAt(e1.transform.position);
+                float dist = Vector3.Distance(transform.position, e1.transform.position);
+                if (dist < 0.5f) {
+                    GameObject.Find("GameManager").GetComponent<GameManager>().currentNPCs--;
+                    Destroy(gameObject);
                 }
             }
         }
@@ -125,7 +156,14 @@ public class NPCBehaviour : MonoBehaviour {
     void FixedUpdate() {
         if(startMovement && stopTime < timeLimit) {
             anim.SetBool("Walking", false);
-            transform.LookAt(playerFeet.transform.position);
+            float dist = Vector3.Distance(transform.position, playerFeet.transform.position);
+            if (dist < 8) {
+                print(dist);
+                Vector3 lookPos = playerFeet.transform.position - transform.position;
+                lookPos.y = 0;
+                Quaternion rotation = Quaternion.LookRotation(lookPos);
+                transform.rotation = Quaternion.Slerp(transform.rotation, rotation, Time.deltaTime * 5);
+            }
         }
 
         sprite.transform.LookAt(Camera.main.transform);

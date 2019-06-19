@@ -79,6 +79,22 @@ SpriteRenderer:
   m_WasSpriteAssigned: 0
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
+--- !u!54 &-3123387302112041435
+Rigidbody:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6422863882931244014}
+  serializedVersion: 2
+  m_Mass: 1
+  m_Drag: 0
+  m_AngularDrag: 0.05
+  m_UseGravity: 1
+  m_IsKinematic: 0
+  m_Interpolate: 0
+  m_Constraints: 84
+  m_CollisionDetection: 0
 --- !u!136 &170358768
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -124,16 +140,6 @@ PrefabInstance:
         type: 3}
       propertyPath: m_TagString
       value: NPC
-      objectReference: {fileID: 0}
-    - target: {fileID: -8250042734801592476, guid: d7153a5f0fe69fc4eaee061cac663ce3,
-        type: 3}
-      propertyPath: m_LocalRotation.x
-      value: 0.08297749
-      objectReference: {fileID: 0}
-    - target: {fileID: -8250042734801592476, guid: d7153a5f0fe69fc4eaee061cac663ce3,
-        type: 3}
-      propertyPath: m_LocalRotation.z
-      value: 0.042626396
       objectReference: {fileID: 0}
     - target: {fileID: -6057140222963153312, guid: d7153a5f0fe69fc4eaee061cac663ce3,
         type: 3}
@@ -199,6 +205,16 @@ PrefabInstance:
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: -8250042734801592476, guid: d7153a5f0fe69fc4eaee061cac663ce3,
+        type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0.08297749
+      objectReference: {fileID: 0}
+    - target: {fileID: -8250042734801592476, guid: d7153a5f0fe69fc4eaee061cac663ce3,
+        type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0.042626396
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: d7153a5f0fe69fc4eaee061cac663ce3, type: 3}

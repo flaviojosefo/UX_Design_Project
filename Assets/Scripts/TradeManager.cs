@@ -171,6 +171,7 @@ public class TradeManager : MonoBehaviour {
                 sfx.Play();
                 cakes -= 1;
                 UpdateUI(5);
+                currentNPC.GetComponent<NPCBehaviour>().Traded = true;
 
             } else {
 
@@ -184,6 +185,7 @@ public class TradeManager : MonoBehaviour {
                 sfx.Play();
                 raffles -= 1;
                 UpdateUI(2);
+                currentNPC.GetComponent<NPCBehaviour>().Traded = true;
 
             } else {
 
